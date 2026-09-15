@@ -9,10 +9,10 @@ export function BrandMark({ compact = false }: { compact?: boolean }) {
       {!compact ? (
         <div className="min-w-0">
           <p className="font-display text-[13px] font-semibold tracking-tight text-white">
-            Seoul Pilgrimage
+            Seoul Pilgrimage Pass
           </p>
           <p className="truncate text-[11px] text-white/45">
-            Independent transit &amp; map pass
+            Independent BTS-era map &amp; transit
           </p>
         </div>
       ) : null}
