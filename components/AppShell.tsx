@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { BottomSheet } from "@/components/BottomSheet";
 import { LiveTransitSync } from "@/components/LiveTransitSync";
+import { NaverWalkSync } from "@/components/NaverWalkSync";
 import { Paywall } from "@/components/Paywall";
 import { Sidebar } from "@/components/Sidebar";
 import { SpotModal } from "@/components/SpotModal";
@@ -17,6 +18,7 @@ export function AppShell() {
   return (
     <main className="relative h-[100dvh] w-full overflow-hidden bg-ink">
       <LiveTransitSync />
+      <NaverWalkSync />
       <MapCanvas />
       <Sidebar />
       <BottomSheet />

@@ -33,8 +33,18 @@ export function kakaoJsKey(): string | undefined {
   return key && key.length > 0 ? key : undefined;
 }
 
+export function naverClientIdServer(): string | undefined {
+  const key = process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID?.trim();
+  return key && key.length > 0 ? key : undefined;
+}
+
+export function naverMapSecret(): string | undefined {
+  const key = process.env.NAVER_MAP_CLIENT_SECRET?.trim();
+  return key && key.length > 0 ? key : undefined;
+}
+
 export function naverJsConfigured(): boolean {
-  return Boolean(process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID?.trim());
+  return Boolean(naverClientIdServer());
 }
 
 export function transitConfig(): TransitConfigResponse {
@@ -44,6 +54,8 @@ export function transitConfig(): TransitConfigResponse {
     kakaoRestConfigured: Boolean(kakaoRestKey()),
     kakaoJsConfigured: Boolean(kakaoJsKey()),
     naverJsConfigured: naverJsConfigured(),
+    naverWalkingConfigured: Boolean(naverClientIdServer() && naverMapSecret()),
+    liveTransitConfigured: Boolean(seoulSubwayKey() || dataGoKrKey()),
     refreshMs: TRANSIT_REFRESH_MS,
   };
 }

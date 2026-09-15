@@ -7,7 +7,8 @@ import { GlassPanel } from "@/components/GlassPanel";
 import { PanelTabs, SearchField } from "@/components/PanelTabs";
 import { SpotList } from "@/components/SpotList";
 import { TaxiCard } from "@/components/TaxiCard";
-import { LiveTransitPanel } from "@/components/LiveTransitPanel";
+import { LiveArrivalsOptional } from "@/components/LiveArrivalsOptional";
+import { TransitGuidePanel } from "@/components/TransitGuidePanel";
 import { TransitHackPanel } from "@/components/TransitHackPanel";
 import { FREE_SPOT_LIMIT } from "@/lib/access";
 import { cn } from "@/lib/cn";
@@ -67,8 +68,9 @@ export function Sidebar() {
               {activePanel === "taxi" ? <TaxiCard /> : null}
               {activePanel === "transit" ? (
                 <>
-                  <LiveTransitPanel />
+                  <TransitGuidePanel />
                   <TransitHackPanel />
+                  <LiveArrivalsOptional />
                 </>
               ) : null}
             </div>

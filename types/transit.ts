@@ -71,6 +71,8 @@ export interface TransitConfigResponse {
   kakaoRestConfigured: boolean;
   kakaoJsConfigured: boolean;
   naverJsConfigured: boolean;
+  naverWalkingConfigured: boolean;
+  liveTransitConfigured: boolean;
   refreshMs: number;
 }
 

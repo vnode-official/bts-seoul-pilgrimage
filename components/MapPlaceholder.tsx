@@ -25,8 +25,7 @@ export function MapPlaceholder({
               </p>
               <p className="mt-1 text-[11px] leading-4 text-white/50">
                 Set NEXT_PUBLIC_NAVER_MAP_CLIENT_ID from Naver Cloud Maps.
-                Pins still use catalog coordinates. Live buses/trains are not
-                invented — they only appear when Seoul/TOPIS keys succeed.
+                Pins, taxi estimates, and Naver subway/bus links still work.
               </p>
             </div>
           </div>

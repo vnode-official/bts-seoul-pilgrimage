@@ -20,7 +20,7 @@ export function TaxiCard() {
   return (
     <div className="space-y-3 px-1">
       <p className="px-1 text-[11px] uppercase tracking-[0.14em] text-white/35">
-        Static KRW matrix · Kakao Navi live drive when keyed
+        Pre-calculated KRW estimates · hail with Kakao T
       </p>
       <select
         value={routeId}
@@ -80,8 +80,8 @@ export function TaxiCard() {
         <ExternalLink className="h-3.5 w-3.5" />
       </button>
       <p className="px-1 text-[11px] leading-4 text-white/35">
-        Kakao T is a deep-link only. Live duration comes from Kakao Navi REST when{" "}
-        <span className="text-white/55">KAKAO_REST_API_KEY</span> is set — never from a fake GPS feed.
+        Subway and bus routing lives on the Transit tab (Naver Maps). This card is
+        taxi only — Kakao T deep-link, not live GPS.
       </p>
     </div>
   );

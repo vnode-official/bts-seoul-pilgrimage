@@ -7,7 +7,8 @@ import { GlassPanel } from "@/components/GlassPanel";
 import { PanelTabs, SearchField } from "@/components/PanelTabs";
 import { SpotList } from "@/components/SpotList";
 import { TaxiCard } from "@/components/TaxiCard";
-import { LiveTransitPanel } from "@/components/LiveTransitPanel";
+import { LiveArrivalsOptional } from "@/components/LiveArrivalsOptional";
+import { TransitGuidePanel } from "@/components/TransitGuidePanel";
 import { TransitHackPanel } from "@/components/TransitHackPanel";
 import { cn } from "@/lib/cn";
 import { useMapSession } from "@/stores/map-session";
@@ -76,7 +77,7 @@ export function BottomSheet() {
           <div className="min-h-0 flex-1 overflow-y-auto px-2 pb-4">
             {snap === "peek" ? (
               <p className="px-3 text-[12px] text-white/45">
-                Drag up for pins, taxi, and live subway / bus arrivals.
+                Drag up for pins, taxi, and Naver subway / bus routing.
               </p>
             ) : (
               <>
@@ -84,8 +85,9 @@ export function BottomSheet() {
                 {activePanel === "taxi" ? <TaxiCard /> : null}
                 {activePanel === "transit" ? (
                   <>
-                    <LiveTransitPanel />
+                    <TransitGuidePanel />
                     <TransitHackPanel />
+                    <LiveArrivalsOptional />
                   </>
                 ) : null}
               </>

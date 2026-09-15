@@ -1,16 +1,19 @@
 "use client";
 
-import { Clock, MapPinned, X } from "lucide-react";
+import { Clock, MapPinned, TrainFront, X } from "lucide-react";
 import { INDEPENDENT_DISCLAIMER, getSpotById } from "@/data/spots";
 import { GlassPanel } from "@/components/GlassPanel";
 import { ScriptBlock } from "@/components/ScriptBlock";
 import { naverSearchUrl } from "@/lib/format";
 import { isSpotUnlocked } from "@/lib/access";
 import { useMapSession } from "@/stores/map-session";
+import { useTransitGuide } from "@/stores/transit-guide";
 
 export function SpotModal() {
   const selectedSpotId = useMapSession((s) => s.selectedSpotId);
   const setSelectedSpotId = useMapSession((s) => s.setSelectedSpotId);
+  const setActivePanel = useMapSession((s) => s.setActivePanel);
+  const setDestSpotId = useTransitGuide((s) => s.setDestSpotId);
   const tier = useMapSession((s) => s.tier);
   const spot = selectedSpotId ? getSpotById(selectedSpotId) : undefined;
 
@@ -93,13 +96,24 @@ export function SpotModal() {
               <ScriptBlock key={script.situation} script={script} />
             ))}
           </div>
+          <button
+            type="button"
+            onClick={() => {
+              setDestSpotId(spot.id);
+              setActivePanel("transit");
+            }}
+            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-4 py-2.5 text-[13px] font-medium text-black"
+          >
+            <TrainFront className="h-4 w-4" />
+            Subway / bus via Naver
+          </button>
           <a
             href={naverSearchUrl(spot.naverPlaceQuery)}
             target="_blank"
             rel="noreferrer"
             className="block rounded-2xl border border-white/10 py-2.5 text-center text-[13px] text-white/80"
           >
-            Open in Naver Maps
+            Open place in Naver Maps
           </a>
           <p className="text-[11px] leading-4 text-white/30">
             {INDEPENDENT_DISCLAIMER}

@@ -7,6 +7,7 @@ import { createPinElement } from "@/lib/pin-html";
 import { useMapSession } from "@/stores/map-session";
 import { KakaoPathLayer } from "@/components/KakaoPathLayer";
 import { LiveVehicleLayer } from "@/components/LiveVehicleLayer";
+import { NaverGuideLayer } from "@/components/NaverGuideLayer";
 import { MapControls } from "@/components/MapControls";
 import { MapPlaceholder } from "@/components/MapPlaceholder";
 import { MockDotField } from "@/components/MockDotField";
@@ -101,6 +102,7 @@ export function MapCanvas() {
       {showFallback ? <MockDotField spots={visible} onSpot={onSpot} /> : null}
       {map && status === "ready" ? (
         <>
+          <NaverGuideLayer map={map} />
           <LiveVehicleLayer map={map} />
           <KakaoPathLayer map={map} />
         </>

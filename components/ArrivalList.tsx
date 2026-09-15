@@ -21,7 +21,7 @@ export function ArrivalList({
   if (arrivals.length === 0) {
     return (
       <p className="rounded-2xl border border-white/10 bg-black/25 px-3 py-4 text-[12px] text-white/45">
-        No live arrivals returned. If a feed failed, the error is above — vehicles are not invented.
+        No live arrivals in this poll. Vehicles are never invented.
       </p>
     );
   }
