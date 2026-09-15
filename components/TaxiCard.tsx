@@ -7,6 +7,7 @@ import { formatKrwRange } from "@/lib/format";
 import { openKakaoT } from "@/lib/kakao";
 import { cn } from "@/lib/cn";
 import { GlassPanel } from "@/components/GlassPanel";
+import { KakaoDriveEstimate } from "@/components/KakaoDriveEstimate";
 
 export function TaxiCard() {
   const [routeId, setRouteId] = useState(TAXI_ROUTES[0].id);
@@ -14,13 +15,12 @@ export function TaxiCard() {
     () => TAXI_ROUTES.find((item) => item.id === routeId) ?? TAXI_ROUTES[0],
     [routeId],
   );
-  const showCeiling =
-    route.id.includes("icn") && route.id.includes("gangnam");
+  const showCeiling = route.id.includes("icn") && route.id.includes("gangnam");
 
   return (
     <div className="space-y-3 px-1">
       <p className="px-1 text-[11px] uppercase tracking-[0.14em] text-white/35">
-        Pre-calculated estimates · not live fares
+        Static KRW matrix · Kakao Navi live drive when keyed
       </p>
       <select
         value={routeId}
@@ -63,6 +63,12 @@ export function TaxiCard() {
           </div>
         ) : null}
       </GlassPanel>
+      <KakaoDriveEstimate
+        origin={route.origin}
+        dest={route.dest}
+        originName={route.originQuery}
+        destName={route.destQuery}
+      />
       <button
         type="button"
         onClick={() => openKakaoT(route.originQuery, route.destQuery)}
@@ -74,8 +80,8 @@ export function TaxiCard() {
         <ExternalLink className="h-3.5 w-3.5" />
       </button>
       <p className="px-1 text-[11px] leading-4 text-white/35">
-        Deep-links Kakao T / taxi.kakao.com. No live Kakao fare API is wired —
-        numbers come from the static route matrix.
+        Kakao T is a deep-link only. Live duration comes from Kakao Navi REST when{" "}
+        <span className="text-white/55">KAKAO_REST_API_KEY</span> is set — never from a fake GPS feed.
       </p>
     </div>
   );

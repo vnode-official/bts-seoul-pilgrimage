@@ -67,6 +67,8 @@ export interface TaxiRoute {
   notes: string;
   originQuery: string;
   destQuery: string;
+  origin: GeoPoint;
+  dest: GeoPoint;
 }
 
 export interface TransitTip {

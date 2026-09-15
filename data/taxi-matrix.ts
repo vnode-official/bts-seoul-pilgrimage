@@ -1,6 +1,17 @@
-import type { TaxiRoute } from "@/types";
+import type { GeoPoint, TaxiRoute } from "@/types";
 
 export const AIRPORT_GANGNAM_CEILING_KRW = 75_000;
+
+const ICN_T1: GeoPoint = { lat: 37.4475, lng: 126.4524 };
+const ICN_T2: GeoPoint = { lat: 37.4686, lng: 126.4335 };
+const GMP: GeoPoint = { lat: 37.5585, lng: 126.7945 };
+const GANGNAM: GeoPoint = { lat: 37.4979, lng: 127.0276 };
+const HONGIK: GeoPoint = { lat: 37.5572, lng: 126.9245 };
+const MYEONGDONG: GeoPoint = { lat: 37.561, lng: 126.9861 };
+const JAMSIL: GeoPoint = { lat: 37.5133, lng: 127.1002 };
+const HANGANGJIN: GeoPoint = { lat: 37.5396, lng: 127.0017 };
+const OLYMPIC: GeoPoint = { lat: 37.5164, lng: 127.1303 };
+const GOCHEOK: GeoPoint = { lat: 37.4982, lng: 126.8671 };
 
 export const TAXI_ROUTES: readonly TaxiRoute[] = [
   {
@@ -18,6 +29,8 @@ export const TAXI_ROUTES: readonly TaxiRoute[] = [
       "Community heuristic: if a tout quotes above ₩75,000 before tolls and late-night surcharge, compare Kakao T and AREX. This is not a legal cap.",
     originQuery: "인천국제공항 제1여객터미널",
     destQuery: "강남역",
+    origin: ICN_T1,
+    dest: GANGNAM,
   },
   {
     id: "icn-t2-gangnam",
@@ -33,6 +46,8 @@ export const TAXI_ROUTES: readonly TaxiRoute[] = [
     notes: "T2 is farther. Same ₩75,000 pause-and-compare rule of thumb.",
     originQuery: "인천국제공항 제2여객터미널",
     destQuery: "강남역",
+    origin: ICN_T2,
+    dest: GANGNAM,
   },
   {
     id: "icn-t1-hongdae",
@@ -48,6 +63,8 @@ export const TAXI_ROUTES: readonly TaxiRoute[] = [
     notes: "AREX all-stop to Hongik Univ. is usually faster door-to-gate than a taxi in evening rain.",
     originQuery: "인천국제공항 제1여객터미널",
     destQuery: "홍대입구역",
+    origin: ICN_T1,
+    dest: HONGIK,
   },
   {
     id: "icn-t1-myeongdong",
@@ -63,6 +80,8 @@ export const TAXI_ROUTES: readonly TaxiRoute[] = [
     notes: "Airport bus 6015 / 6701 are the boring correct answers with luggage.",
     originQuery: "인천국제공항 제1여객터미널",
     destQuery: "명동역",
+    origin: ICN_T1,
+    dest: MYEONGDONG,
   },
   {
     id: "icn-t1-jamsil",
@@ -78,6 +97,8 @@ export const TAXI_ROUTES: readonly TaxiRoute[] = [
     notes: "Longest of the core tourist hops. Late-night surcharge stacks. AREX + Line 2 is slower but priced.",
     originQuery: "인천국제공항 제1여객터미널",
     destQuery: "잠실역",
+    origin: ICN_T1,
+    dest: JAMSIL,
   },
   {
     id: "icn-t1-hannam",
@@ -93,6 +114,8 @@ export const TAXI_ROUTES: readonly TaxiRoute[] = [
     notes: "Ask for 한남동 / 한강진역. Do not say only “HYBE” — drivers know Hangang-daero better.",
     originQuery: "인천국제공항 제1여객터미널",
     destQuery: "한강진역",
+    origin: ICN_T1,
+    dest: HANGANGJIN,
   },
   {
     id: "gmp-gangnam",
@@ -108,6 +131,8 @@ export const TAXI_ROUTES: readonly TaxiRoute[] = [
     notes: "Line 9 express from Gimpo Airport to Sinnonhyeon is the adult choice.",
     originQuery: "김포국제공항",
     destQuery: "강남역",
+    origin: GMP,
+    dest: GANGNAM,
   },
   {
     id: "gmp-hongdae",
@@ -123,6 +148,8 @@ export const TAXI_ROUTES: readonly TaxiRoute[] = [
     notes: "AREX / Line 5 / Line 6 depending on time. Taxi is fine with two suitcases.",
     originQuery: "김포국제공항",
     destQuery: "홍대입구역",
+    origin: GMP,
+    dest: HONGIK,
   },
   {
     id: "hongdae-jamsil",
@@ -138,6 +165,8 @@ export const TAXI_ROUTES: readonly TaxiRoute[] = [
     notes: "Line 2 is a one-seat ride. Taxi only if you are late for a gate time.",
     originQuery: "홍대입구역",
     destQuery: "잠실역",
+    origin: HONGIK,
+    dest: JAMSIL,
   },
   {
     id: "myeongdong-hannam",
@@ -153,6 +182,8 @@ export const TAXI_ROUTES: readonly TaxiRoute[] = [
     notes: "Short hop. Line 6 from Itaewon/Hangangjin plus a walk also works.",
     originQuery: "명동역",
     destQuery: "한강진역",
+    origin: MYEONGDONG,
+    dest: HANGANGJIN,
   },
   {
     id: "gangnam-olympic",
@@ -168,6 +199,8 @@ export const TAXI_ROUTES: readonly TaxiRoute[] = [
     notes: "Line 2 to Jamsil then 8/9, or Line 9 from Sinnonhyeon. Taxi if you have concert merch bags.",
     originQuery: "강남역",
     destQuery: "올림픽공원역",
+    origin: GANGNAM,
+    dest: OLYMPIC,
   },
   {
     id: "hongdae-gocheok",
@@ -183,6 +216,8 @@ export const TAXI_ROUTES: readonly TaxiRoute[] = [
     notes: "Line 2 westbound toward Sindorim / Guro. Do not aim for Jamsil by accident.",
     originQuery: "홍대입구역",
     destQuery: "고척스카이돔",
+    origin: HONGIK,
+    dest: GOCHEOK,
   },
 ];
 

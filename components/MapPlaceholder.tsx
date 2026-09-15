@@ -24,8 +24,9 @@ export function MapPlaceholder({
                   : "Naver Maps failed to load"}
               </p>
               <p className="mt-1 text-[11px] leading-4 text-white/50">
-                Set NEXT_PUBLIC_NAVER_MAP_CLIENT_ID. Pins, taxi, transit, and
-                checkout still run on mock coordinates.
+                Set NEXT_PUBLIC_NAVER_MAP_CLIENT_ID from Naver Cloud Maps.
+                Pins still use catalog coordinates. Live buses/trains are not
+                invented — they only appear when Seoul/TOPIS keys succeed.
               </p>
             </div>
           </div>

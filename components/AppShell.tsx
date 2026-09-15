@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { BottomSheet } from "@/components/BottomSheet";
+import { LiveTransitSync } from "@/components/LiveTransitSync";
 import { Paywall } from "@/components/Paywall";
 import { Sidebar } from "@/components/Sidebar";
 import { SpotModal } from "@/components/SpotModal";
@@ -15,6 +16,7 @@ const MapCanvas = dynamic(
 export function AppShell() {
   return (
     <main className="relative h-[100dvh] w-full overflow-hidden bg-ink">
+      <LiveTransitSync />
       <MapCanvas />
       <Sidebar />
       <BottomSheet />

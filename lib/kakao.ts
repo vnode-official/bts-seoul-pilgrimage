@@ -13,6 +13,24 @@ export function kakaoTDeepLink(origin: string, destination: string): string {
   return `${KAKAO_T_WEB}?${params.toString()}`;
 }
 
+export function kakaoMapPlaceUrl(
+  name: string,
+  coords: { lat: number; lng: number },
+): string {
+  return `https://map.kakao.com/link/map/${encodeURIComponent(name)},${coords.lat},${coords.lng}`;
+}
+
+export function kakaoMapRouteUrl(
+  originName: string,
+  origin: { lat: number; lng: number },
+  destName: string,
+  dest: { lat: number; lng: number },
+): string {
+  const from = `${encodeURIComponent(originName)},${origin.lat},${origin.lng}`;
+  const to = `${encodeURIComponent(destName)},${dest.lat},${dest.lng}`;
+  return `https://map.kakao.com/?sName=${from}&eName=${to}`;
+}
+
 export function openKakaoT(origin: string, destination: string): void {
   const web = kakaoTDeepLink(origin, destination);
   const probe = window.open(KAKAO_T_SCHEME, "_blank", "noopener,noreferrer");
