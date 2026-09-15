@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { publicOrigin } from "@/lib/origin";
 import { createLemonCheckoutUrl } from "@/lib/lemon";
 import {
   demoUnlockAllowed,
@@ -9,8 +10,7 @@ import {
 import type { CheckoutResponse } from "@/types";
 
 export async function POST(request: Request) {
-  const origin = new URL(request.url).origin;
-  const successUrl = `${origin}/pass/success`;
+  const successUrl = `${publicOrigin(request)}/pass/success`;
   const pending = await signSession({
     tier: "free",
     source: "jwt",
