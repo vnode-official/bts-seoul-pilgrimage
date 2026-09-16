@@ -30,8 +30,8 @@ export function TransitGuidePanel() {
           Naver subway / bus routing
         </p>
         <p className="mt-1 text-[12px] leading-4 text-white/50">
-          Guidance for the selected pin. Live turn-by-turn is Naver Maps — we do
-          not invent vehicle GPS.
+          Steps for this pin. Turn-by-turn and satellite open in the Naver Maps
+          app — we do not invent live vehicle GPS.
         </p>
       </div>
       <label className="block px-0.5 text-[11px] text-white/40">
