@@ -5,7 +5,7 @@ import { TRANSIT_HUBS, getTransitHub } from "@/data/hubs";
 import { SPOTS } from "@/data/spots";
 import { GuideSteps } from "@/components/GuideSteps";
 import { isSpotUnlocked } from "@/lib/access";
-import { openNaverDirections } from "@/lib/naver-directions";
+import { tryOpenNaverApp } from "@/lib/naver-directions";
 import { buildTransitGuide } from "@/lib/transit-guide";
 import { useMapSession } from "@/stores/map-session";
 import { useTransitGuide } from "@/stores/transit-guide";
@@ -77,15 +77,17 @@ export function TransitGuidePanel() {
         </button>
       ) : null}
       <GuideSteps steps={guide.steps} stationLabel={guide.destStation?.lineEn} />
-      <button
-        type="button"
-        onClick={() => openNaverDirections(guide.naverTransitApp, guide.naverTransitWeb)}
+      <a
+        href={guide.naverTransitWeb}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() => tryOpenNaverApp(guide.naverTransitApp)}
         className="flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-4 py-2.5 text-[13px] font-medium text-black"
       >
         <TrainFront className="h-4 w-4" />
         Open subway / bus in Naver Maps
         <ExternalLink className="h-3.5 w-3.5" />
-      </button>
+      </a>
       <a
         href={guide.naverWalkWeb}
         target="_blank"

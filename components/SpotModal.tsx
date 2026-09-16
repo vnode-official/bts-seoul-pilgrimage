@@ -103,6 +103,7 @@ export function SpotModal() {
             target={{
               nameEn: spot.nameEn,
               nameKr: spot.nameKr,
+              query: spot.naverPlaceQuery,
               coords: spot.coords,
             }}
             label="Open in Naver Map"

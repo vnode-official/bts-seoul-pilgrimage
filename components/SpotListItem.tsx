@@ -63,7 +63,12 @@ export function SpotListItem({ spot }: { spot: Spot }) {
         {unlocked ? (
           <NaverOpenButton
             variant="compact"
-            target={{ nameEn: spot.nameEn, nameKr: spot.nameKr, coords: spot.coords }}
+            target={{
+              nameEn: spot.nameEn,
+              nameKr: spot.nameKr,
+              query: spot.naverPlaceQuery,
+              coords: spot.coords,
+            }}
           />
         ) : null}
       </div>
