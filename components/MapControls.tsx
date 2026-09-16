@@ -35,7 +35,7 @@ export function MapControls({
         type="button"
         onClick={onRecenter}
         className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-[#0F0F12]/70 text-white backdrop-blur-md"
-        aria-label="Recenter Seoul"
+        aria-label="Recenter map"
       >
         <LocateFixed className="h-4 w-4" />
       </button>

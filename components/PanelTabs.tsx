@@ -46,7 +46,7 @@ export function SearchField() {
       <input
         value={search}
         onChange={(event) => setSearch(event.target.value)}
-        placeholder="Search pins, stations, food"
+        placeholder="Search Seoul, Goyang, stations, food"
         className="w-full rounded-2xl border border-white/10 bg-black/30 py-2 pl-9 pr-3 text-[13px] text-white outline-none placeholder:text-white/30 focus:border-accent/40"
       />
     </label>

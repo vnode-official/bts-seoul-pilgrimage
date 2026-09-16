@@ -100,6 +100,26 @@ export const TRANSIT_HUBS: readonly TransitHub[] = [
     lines: ["AREX", "Line 1", "Line 4"],
     naverName: "서울역",
   },
+  {
+    id: "daehwa",
+    nameEn: "Daehwa (Goyang)",
+    nameKr: "대화",
+    coords: { lat: 37.6766, lng: 126.7476 },
+    kind: "station",
+    stationId: "daehwa",
+    lines: ["Line 3"],
+    naverName: "대화역",
+  },
+  {
+    id: "jeongbalsan",
+    nameEn: "Jeongbalsan (Goyang)",
+    nameKr: "정발산",
+    coords: { lat: 37.6597, lng: 126.7733 },
+    kind: "station",
+    stationId: "jeongbalsan",
+    lines: ["Line 3"],
+    naverName: "정발산역",
+  },
 ];
 
 export function getTransitHub(id: string): TransitHub | undefined {

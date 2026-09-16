@@ -59,7 +59,8 @@ export function SpotModal() {
             <p className="mt-0.5 text-[14px] text-white/55">{spot.nameKr}</p>
             <p className="mt-2 flex items-center gap-1.5 text-[12px] text-white/45">
               <MapPinned className="h-3.5 w-3.5" />
-              {spot.neighborhood} · {spot.nearestStation} · {spot.line}
+              {spot.region === "goyang" ? "Goyang" : "Seoul"} · {spot.neighborhood} ·{" "}
+              {spot.nearestStation} · {spot.line}
             </p>
           </div>
           <div className="rounded-2xl border border-white/10 bg-black/25 p-3">
@@ -84,8 +85,9 @@ export function SpotModal() {
           ) : null}
           {spot.naverRatingSnapshot ? (
             <p className="text-[12px] text-white/50">
-              Editorial Naver snapshot {spot.naverRatingSnapshot.toFixed(2)} — not
-              a live API rating.
+              {spot.ratingSource === "curated"
+                ? `Curated editorial ${spot.naverRatingSnapshot.toFixed(2)} (Naver 4.8+ style) — not a live scraped Naver score.`
+                : `Editorial Naver snapshot ${spot.naverRatingSnapshot.toFixed(2)} — not a live API rating.`}
             </p>
           ) : null}
           <div className="space-y-2">

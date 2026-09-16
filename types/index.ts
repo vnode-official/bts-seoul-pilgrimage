@@ -3,6 +3,10 @@ export type AccessTier = "free" | "premium";
 export type SessionSource = "none" | "jwt" | "demo";
 export type SheetSnap = "peek" | "half" | "full";
 export type MapFilter = "all" | "bts" | "food";
+export type SpotRegion = "seoul" | "goyang";
+export type RegionFilter = "all" | SpotRegion;
+/** Editorial badge only — never a live scraped Naver API score. */
+export type RatingSource = "curated";
 export type SidePanel = "spots" | "taxi" | "transit";
 
 export interface GeoPoint {
@@ -37,6 +41,7 @@ export interface Spot {
   nameEn: string;
   nameKr: string;
   category: SpotCategory;
+  region: SpotRegion;
   tier: AccessTier;
   neighborhood: string;
   district: string;
@@ -49,7 +54,9 @@ export interface Spot {
   publicRecord?: string;
   tags: string[];
   image: SpotImage;
+  /** Curated editorial figure in the 4.8+ style — not live Naver. */
   naverRatingSnapshot?: number;
+  ratingSource?: RatingSource;
   naverPlaceQuery: string;
 }
 

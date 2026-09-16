@@ -3,14 +3,14 @@
 import { useState } from "react";
 import { Check, Ticket, X } from "lucide-react";
 import { GlassPanel } from "@/components/GlassPanel";
-import { FREE_SPOT_LIMIT, PREMIUM_PRICE_USD } from "@/lib/access";
+import { PREMIUM_PRICE_USD } from "@/lib/access";
 import { formatUsd } from "@/lib/format";
 import { SPOTS } from "@/data/spots";
 import { useMapSession } from "@/stores/map-session";
 import type { CheckoutResponse } from "@/types";
 
 const INCLUDED = [
-  `${SPOTS.length} editorial pins (legacy spots + Naver 4.8+ food)`,
+  `${SPOTS.length} editorial pins (Seoul + Goyang, BTS spots + curated Naver 4.8+ food)`,
   "Full subway transfer & boarding notes",
   "Airport–Gangnam taxi ceiling heuristic + route matrix",
   "EN/KR ordering scripts at every kitchen",
@@ -70,8 +70,8 @@ export function Paywall() {
             {formatUsd(PREMIUM_PRICE_USD)} · one-time · independent fan editor
           </p>
           <p className="mt-3 text-[13px] leading-5 text-white/60">
-            Free tier keeps the first {FREE_SPOT_LIMIT} historical pins and the
-            airport taxi rules. The Pass unlocks the rest of the map.
+            Free tier keeps public historical pins, a few Goyang landmarks, and
+            two Seoul kitchens. The Pass unlocks the rest of Seoul and Goyang.
           </p>
           <ul className="mt-4 space-y-2">
             {INCLUDED.map((item) => (

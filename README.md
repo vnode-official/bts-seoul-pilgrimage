@@ -1,6 +1,6 @@
 # Seoul Pilgrimage Pass
 
-Independent D2C map for fans visiting Seoul: editorial **BTS-era neighborhood pins**, **Naver 4.8+ food** (snapshot ratings, not live), **Naver Maps app routing**, and **Kakao T taxi hail**.
+Independent D2C map for fans visiting **Seoul and Goyang**: editorial **BTS-era neighborhood pins**, **curated Naver 4.8+ style food** (editorial ratings, not live scraped scores), **Naver Maps app routing**, and **Kakao T taxi hail**.
 
 Not affiliated with BTS, HYBE, Big Hit, Naver, or Kakao.
 
@@ -14,6 +14,13 @@ Core UX does **not** need `NEXT_PUBLIC_NAVER_MAP_CLIENT_ID` or any Naver Cloud r
 - Taxi: static KRW card + Kakao T deep-link
 
 Satellite and street detail live in **Naver Maps**, not inside this site. We never invent live vehicle GPS.
+
+## Regions
+
+- **Seoul** — historical BTS-era pins + food (including a curated 4.8+ extra set)
+- **Goyang** — 고양종합운동장 (concert-venue pilgrimage context, no invented dates), 현대백화점 킨텍스점, Ilsan / KINTEX / Deogyang places
+
+Use the Seoul / Goyang filter in the sidebar. The map opens on a metro view so Goyang pins sit on the same canvas.
 
 ## Run locally
 
@@ -43,8 +50,9 @@ No Naver Cloud client id is required to redeploy.
 
 ## Product
 
-- **Free:** first 5 historical pins + airport taxi / T-money / AREX rules + Naver Map open + routing for those pins
-- **Pass $19.99:** all pins as destinations + full subway hacks
+- **Free:** public historical pins, selected Goyang landmarks, two Seoul kitchens, airport taxi / T-money / AREX rules, Naver Map open + routing for those pins
+- **Pass $19.99:** all Seoul + Goyang pins as destinations + full subway hacks
+- Food ratings: `ratingSource: "curated"` editorial badges — **not** live Naver API scores
 - Kakao T: `kakaot://` then `taxi.kakao.com`
 
 ## Stack

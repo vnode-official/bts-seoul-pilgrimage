@@ -1,6 +1,6 @@
-import type { AccessTier, MapFilter, Spot } from "@/types";
+import type { AccessTier, MapFilter, RegionFilter, Spot } from "@/types";
 
-export const FREE_SPOT_LIMIT = 5;
+export const FREE_SPOT_LIMIT = 11;
 export const PREMIUM_PRICE_USD = 19.99;
 export const PASS_NAME = "Seoul Pilgrimage Pass";
 
@@ -16,6 +16,7 @@ export function filterSpots(
   options: {
     tier: AccessTier;
     filter: MapFilter;
+    region: RegionFilter;
     search: string;
     includeLocked: boolean;
   },
@@ -23,6 +24,9 @@ export function filterSpots(
   const q = options.search.trim().toLowerCase();
   return spots.filter((spot) => {
     if (options.filter !== "all" && spot.category !== options.filter) {
+      return false;
+    }
+    if (options.region !== "all" && spot.region !== options.region) {
       return false;
     }
     if (!options.includeLocked && !isSpotUnlocked(spot, options.tier)) {
@@ -37,6 +41,7 @@ export function filterSpots(
       spot.neighborhood,
       spot.district,
       spot.nearestStation,
+      spot.region,
       ...spot.tags,
     ]
       .join(" ")

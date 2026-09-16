@@ -52,7 +52,8 @@ export function SpotListItem({ spot }: { spot: Spot }) {
             {spot.nameEn}
           </span>
           <span className="mt-0.5 block truncate text-[11px] text-white/45">
-            {spot.nameKr} · {spot.neighborhood}
+            {spot.nameKr} · {spot.region === "goyang" ? "Goyang" : "Seoul"} ·{" "}
+            {spot.neighborhood}
           </span>
         </span>
       </button>

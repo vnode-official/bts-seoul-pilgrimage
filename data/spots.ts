@@ -1,73 +1,44 @@
-import type { OrderingScript, Spot, SpotImage, VisitWindow } from "@/types";
+import type { RegionFilter, Spot } from "@/types";
+import { GOYANG_SPOTS } from "@/data/goyang-spots";
+import { SEOUL_FOOD_EXTRA } from "@/data/seoul-food-extra";
+import {
+  FOOD,
+  G_FOOD,
+  G_HALL,
+  G_NIGHT,
+  G_RIVER,
+  G_STREET,
+  PALACE,
+  STREET,
+  VENUE,
+  bts,
+  food,
+  scripts,
+  unsplash,
+} from "@/data/spot-kit";
 
 export const SEOUL_CENTER = { lat: 37.5665, lng: 126.978 } as const;
+export const GOYANG_CENTER = { lat: 37.6585, lng: 126.768 } as const;
+export const METRO_CENTER = { lat: 37.59, lng: 126.88 } as const;
+
 export const INDEPENDENT_DISCLAIMER =
   "Independent fan-made travel editor. Not affiliated with BTS, HYBE, Big Hit, Naver, or Kakao. Hours, menus, and ratings change — confirm on Naver Maps the morning you go.";
 
-const PALACE: VisitWindow = {
-  days: "Typically Tue–Sun (closed Tue at some palaces)",
-  hours: "Check Naver the same day",
-  notes: "Ticketing and last-entry rules change seasonally.",
-};
-
-const VENUE: VisitWindow = {
-  days: "Event days only unless noted",
-  hours: "Box office hours vary",
-  notes: "This is a public venue pin, not a guaranteed artist appearance.",
-};
-
-const STREET: VisitWindow = {
-  days: "Always viewable from public streets",
-  hours: "Daylight recommended for photos",
-  notes: "Do not enter private lobbies, offices, or residences.",
-};
-
-const FOOD: VisitWindow = {
-  days: "Most days; many kitchens close between lunch and dinner",
-  hours: "Verify last order on Naver",
-  notes: "Weekend queues are normal. Put your name in and walk the block.",
-};
-
-function unsplash(id: string, alt: string, gradient: string): SpotImage {
-  return {
-    kind: "unsplash",
-    src: `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1400&q=70`,
-    alt,
-    gradient,
-  };
+export function mapViewForRegion(region: RegionFilter): {
+  lat: number;
+  lng: number;
+  zoom: number;
+} {
+  if (region === "goyang") {
+    return { lat: GOYANG_CENTER.lat, lng: GOYANG_CENTER.lng, zoom: 13 };
+  }
+  if (region === "seoul") {
+    return { lat: SEOUL_CENTER.lat, lng: SEOUL_CENTER.lng, zoom: 12 };
+  }
+  return { lat: METRO_CENTER.lat, lng: METRO_CENTER.lng, zoom: 11 };
 }
 
-function scripts(
-  first: OrderingScript,
-  extra: OrderingScript[] = [],
-): OrderingScript[] {
-  return [
-    first,
-    {
-      situation: "Asking if they speak English",
-      en: "Sorry — do you speak a little English?",
-      kr: "죄송합니다, 영어 조금 가능하세요?",
-      romanization: "Joesonghamnida, yeongeo jogeum ganeunghaseyo?",
-    },
-    ...extra,
-  ];
-}
-
-function bts(partial: Omit<Spot, "category">): Spot {
-  return { ...partial, category: "bts" };
-}
-
-function food(partial: Omit<Spot, "category">): Spot {
-  return { ...partial, category: "food" };
-}
-
-const G_NIGHT = "linear-gradient(160deg,#1a1428 0%,#3b2166 48%,#0F0F12 100%)";
-const G_RIVER = "linear-gradient(160deg,#102028 0%,#1e4a5c 50%,#0F0F12 100%)";
-const G_HALL = "linear-gradient(160deg,#16161c 0%,#2a2438 52%,#0F0F12 100%)";
-const G_FOOD = "linear-gradient(160deg,#2a1612 0%,#5a2a18 50%,#0F0F12 100%)";
-const G_STREET = "linear-gradient(160deg,#141820 0%,#2a3040 50%,#0F0F12 100%)";
-
-export const SPOTS: readonly Spot[] = [
+const CORE_SPOTS: readonly Spot[] = [
   bts({
     id: "ilji-art-hall",
     slug: "ilji-art-hall",
@@ -1675,6 +1646,12 @@ export const SPOTS: readonly Spot[] = [
   }),
 ];
 
+export const SPOTS: readonly Spot[] = [
+  ...CORE_SPOTS,
+  ...SEOUL_FOOD_EXTRA,
+  ...GOYANG_SPOTS,
+];
+
 export function getSpotById(id: string): Spot | undefined {
   return SPOTS.find((spot) => spot.id === id);
 }
@@ -1683,7 +1660,13 @@ export function spotsByCategory(category: Spot["category"]): Spot[] {
   return SPOTS.filter((spot) => spot.category === category);
 }
 
+export function spotsByRegion(region: Spot["region"]): Spot[] {
+  return SPOTS.filter((spot) => spot.region === region);
+}
+
 export const FREE_SPOTS = SPOTS.filter((spot) => spot.tier === "free");
 export const PREMIUM_SPOTS = SPOTS.filter((spot) => spot.tier === "premium");
 export const BTS_SPOT_COUNT = SPOTS.filter((s) => s.category === "bts").length;
 export const FOOD_SPOT_COUNT = SPOTS.filter((s) => s.category === "food").length;
+export const SEOUL_SPOT_COUNT = SPOTS.filter((s) => s.region === "seoul").length;
+export const GOYANG_SPOT_COUNT = SPOTS.filter((s) => s.region === "goyang").length;

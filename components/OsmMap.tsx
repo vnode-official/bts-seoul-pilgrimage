@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Map as LeafletMap, Marker } from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { SPOTS, SEOUL_CENTER } from "@/data/spots";
+import { SPOTS, mapViewForRegion } from "@/data/spots";
 import { filterSpots, isSpotUnlocked } from "@/lib/access";
 import { OsmGuideLayer, paintOsmPins } from "@/components/OsmGuideLayer";
 import { useMapSession } from "@/stores/map-session";
@@ -21,11 +21,18 @@ export function OsmMap({
   const [map, setMap] = useState<LeafletMap | null>(null);
   const tier = useMapSession((state) => state.tier);
   const categoryFilter = useMapSession((state) => state.categoryFilter);
+  const regionFilter = useMapSession((state) => state.regionFilter);
   const search = useMapSession((state) => state.search);
   const selectedSpotId = useMapSession((state) => state.selectedSpotId);
   const setSelectedSpotId = useMapSession((state) => state.setSelectedSpotId);
   const requestUnlock = useMapSession((state) => state.requestUnlock);
-  const visible = filterSpots(SPOTS, { tier, filter: categoryFilter, search, includeLocked: true });
+  const visible = filterSpots(SPOTS, {
+    tier,
+    filter: categoryFilter,
+    region: regionFilter,
+    search,
+    includeLocked: true,
+  });
 
   const onSpot = useCallback(
     (spot: Spot) => {
@@ -50,12 +57,13 @@ export function OsmMap({
 
   useEffect(() => {
     if (!leaflet || !hostRef.current) return;
+    const view = mapViewForRegion("all");
     const instance = leaflet.map(hostRef.current, {
       zoomControl: false,
       attributionControl: false,
-      minZoom: 10,
+      minZoom: 9,
       maxZoom: 16,
-    }).setView([SEOUL_CENTER.lat, SEOUL_CENTER.lng], 12);
+    }).setView([view.lat, view.lng], view.zoom);
     leaflet
       .tileLayer(
         "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
@@ -85,6 +93,12 @@ export function OsmMap({
     );
     markersRef.current = paintOsmPins(leaflet, map, visible, onSpot, lockedIds);
   }, [leaflet, map, onSpot, tier, visible]);
+
+  useEffect(() => {
+    if (!map) return;
+    const view = mapViewForRegion(regionFilter);
+    map.flyTo([view.lat, view.lng], view.zoom, { duration: 0.5 });
+  }, [map, regionFilter]);
 
   useEffect(() => {
     if (!map || !selectedSpotId) return;

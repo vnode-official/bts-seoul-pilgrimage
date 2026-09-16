@@ -3,6 +3,7 @@ import type {
   AccessTier,
   MapFilter,
   PublicSession,
+  RegionFilter,
   SessionSource,
   SheetSnap,
   SidePanel,
@@ -19,6 +20,7 @@ interface MapSessionState {
   mobileSheet: SheetSnap;
   activePanel: SidePanel;
   categoryFilter: MapFilter;
+  regionFilter: RegionFilter;
   search: string;
   paywallOpen: boolean;
   hydrate: () => Promise<void>;
@@ -27,6 +29,7 @@ interface MapSessionState {
   setMobileSheet: (snap: SheetSnap) => void;
   setActivePanel: (panel: SidePanel) => void;
   setCategoryFilter: (filter: MapFilter) => void;
+  setRegionFilter: (filter: RegionFilter) => void;
   setSearch: (value: string) => void;
   setPaywallOpen: (open: boolean) => void;
   requestUnlock: () => void;
@@ -43,6 +46,7 @@ export const useMapSession = create<MapSessionState>((set, get) => ({
   mobileSheet: "peek",
   activePanel: "spots",
   categoryFilter: "all",
+  regionFilter: "all",
   search: "",
   paywallOpen: false,
   hydrate: async () => {
@@ -69,6 +73,7 @@ export const useMapSession = create<MapSessionState>((set, get) => ({
   setMobileSheet: (snap) => set({ mobileSheet: snap }),
   setActivePanel: (panel) => set({ activePanel: panel }),
   setCategoryFilter: (filter) => set({ categoryFilter: filter }),
+  setRegionFilter: (filter) => set({ regionFilter: filter }),
   setSearch: (value) => set({ search: value }),
   setPaywallOpen: (open) => set({ paywallOpen: open }),
   requestUnlock: () => set({ paywallOpen: true }),
