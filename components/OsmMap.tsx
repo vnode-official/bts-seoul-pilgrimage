@@ -52,16 +52,21 @@ export function OsmMap({
     if (!leaflet || !hostRef.current) return;
     const instance = leaflet.map(hostRef.current, {
       zoomControl: false,
-      attributionControl: true,
+      attributionControl: false,
       minZoom: 10,
-      maxZoom: 18,
+      maxZoom: 16,
     }).setView([SEOUL_CENTER.lat, SEOUL_CENTER.lng], 12);
     leaflet
-      .tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-        attribution: "&copy; OpenStreetMap &copy; CARTO",
-        subdomains: "abcd",
-        maxZoom: 19,
-      })
+      .tileLayer(
+        "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+        { maxZoom: 16 },
+      )
+      .addTo(instance);
+    leaflet
+      .tileLayer(
+        "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}",
+        { maxZoom: 16, opacity: 0.55 },
+      )
       .addTo(instance);
     mapRef.current = instance;
     setMap(instance);
@@ -90,7 +95,9 @@ export function OsmMap({
 
   return (
     <>
-      <div ref={hostRef} className="h-full w-full" />
+      <div className="guide-map h-full w-full">
+        <div ref={hostRef} className="h-full w-full" />
+      </div>
       {map && leaflet ? <OsmGuideLayer map={map} leaflet={leaflet} /> : null}
     </>
   );

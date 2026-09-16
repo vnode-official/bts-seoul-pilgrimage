@@ -8,7 +8,7 @@ Not affiliated with BTS, HYBE, Big Hit, Naver, or Kakao.
 
 Core UX does **not** need `NEXT_PUBLIC_NAVER_MAP_CLIENT_ID` or any Naver Cloud registration.
 
-- In-app map: dark OpenStreetMap / CARTO tiles + purple pins (guide overlay, not live GPS)
+- In-app map: dark Esri canvas + purple pins (guide overlay, not live GPS). No Carto/Leaflet marketing chrome.
 - **Open in Naver Map** on every unlocked pin: mobile `nmap://place` deep-link, then `map.naver.com` hybrid/satellite fallback at that lat/lng
 - Transit tab: subway/bus and walk still open in the Naver Maps app/web
 - Taxi: static KRW card + Kakao T deep-link
@@ -49,4 +49,4 @@ No Naver Cloud client id is required to redeploy.
 
 ## Stack
 
-Next.js 14 App Router, TypeScript, Tailwind, Leaflet (OSM), Lucide, Zustand, `jose`.
+Next.js 14 App Router, TypeScript, Tailwind, Lucide, Zustand, `jose`.

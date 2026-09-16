@@ -17,6 +17,9 @@ export function MapCanvas() {
     <div className="absolute inset-0 z-0 isolate bg-[#0F0F12]">
       <OsmMap onReady={onReady} />
       <MapHint />
+      <p className="pointer-events-none absolute bottom-2 left-3 z-[5] text-[9px] tracking-[0.08em] text-white/20 md:bottom-3 md:left-4">
+        © Esri
+      </p>
       <MapControls
         onZoomIn={() => mapRef.current?.zoomIn()}
         onZoomOut={() => mapRef.current?.zoomOut()}

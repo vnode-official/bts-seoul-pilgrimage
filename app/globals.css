@@ -92,6 +92,18 @@ body {
   font: inherit;
 }
 
+.guide-map .leaflet-control-container,
+.guide-map .leaflet-control-attribution,
+.guide-map .leaflet-control-zoom,
+.guide-map .leaflet-bottom,
+.guide-map .leaflet-top {
+  display: none !important;
+}
+
+.guide-map .leaflet-tile-pane {
+  filter: brightness(0.72) contrast(1.14) saturate(0.2);
+}
+
 .osm-pin {
   background: none !important;
   border: none !important;
