@@ -22,6 +22,18 @@ Satellite and street detail live in **Naver Maps**, not inside this site. We nev
 
 Use the Seoul / Goyang filter in the sidebar. The map opens on a metro view so Goyang pins sit on the same canvas.
 
+## Share
+
+Each pin has **Share / Copy link**. Mobile uses the Web Share sheet; otherwise it copies ready-to-paste EN text:
+
+```
+THE BTS SEOUL PILGRIMAGE & TRANSIT PASS
+Hongdae Playground (홍대 놀이터) — independent Seoul + Goyang pin map.
+https://bts-seoul-pilgrimage.vercel.app/?spot=hongdae-playground
+```
+
+`/?spot=<slug>` opens that pin (and the Pass paywall if it is locked). Optional `?ref=` is stored first-touch in `localStorage` (`bts_invite_ref`) and stripped from the address bar — no invite chrome.
+
 ## Run locally
 
 ```bash

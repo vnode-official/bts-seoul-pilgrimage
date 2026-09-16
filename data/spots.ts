@@ -1656,6 +1656,14 @@ export function getSpotById(id: string): Spot | undefined {
   return SPOTS.find((spot) => spot.id === id);
 }
 
+export function getSpotBySlug(token: string): Spot | undefined {
+  const needle = token.trim().toLowerCase();
+  if (!needle) {
+    return undefined;
+  }
+  return SPOTS.find((spot) => spot.slug === needle || spot.id === needle);
+}
+
 export function spotsByCategory(category: Spot["category"]): Spot[] {
   return SPOTS.filter((spot) => spot.category === category);
 }

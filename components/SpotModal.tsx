@@ -4,6 +4,7 @@ import { Clock, MapPinned, TrainFront, X } from "lucide-react";
 import { INDEPENDENT_DISCLAIMER, getSpotById } from "@/data/spots";
 import { GlassPanel } from "@/components/GlassPanel";
 import { NaverOpenButton } from "@/components/NaverOpenButton";
+import { ShareSpotButton } from "@/components/ShareSpotButton";
 import { ScriptBlock } from "@/components/ScriptBlock";
 import { isSpotUnlocked } from "@/lib/access";
 import { useMapSession } from "@/stores/map-session";
@@ -106,6 +107,7 @@ export function SpotModal() {
             }}
             label="Open in Naver Map"
           />
+          <ShareSpotButton spot={spot} />
           <p className="text-center text-[11px] leading-4 text-white/40">
             Opens the Naver Maps app for satellite and street detail. This page
             does not embed Naver Cloud tiles.

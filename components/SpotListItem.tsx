@@ -4,6 +4,7 @@ import { Lock, MapPin, Utensils } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { isSpotUnlocked } from "@/lib/access";
 import { NaverOpenButton } from "@/components/NaverOpenButton";
+import { ShareSpotButton } from "@/components/ShareSpotButton";
 import { useMapSession } from "@/stores/map-session";
 import type { Spot } from "@/types";
 
@@ -57,12 +58,15 @@ export function SpotListItem({ spot }: { spot: Spot }) {
           </span>
         </span>
       </button>
-      {unlocked ? (
-        <NaverOpenButton
-          variant="compact"
-          target={{ nameEn: spot.nameEn, nameKr: spot.nameKr, coords: spot.coords }}
-        />
-      ) : null}
+      <div className="flex shrink-0 flex-col items-end gap-1">
+        <ShareSpotButton variant="compact" spot={spot} />
+        {unlocked ? (
+          <NaverOpenButton
+            variant="compact"
+            target={{ nameEn: spot.nameEn, nameKr: spot.nameKr, coords: spot.coords }}
+          />
+        ) : null}
+      </div>
     </div>
   );
 }
