@@ -25,20 +25,20 @@ function secretBytes(): Uint8Array {
 
 export function lemonConfigured(): boolean {
   return Boolean(
-    process.env.LEMON_SQUEEZY_VARIANT_ID ||
-      process.env.NEXT_PUBLIC_LEMON_SQUEEZY_VARIANT_ID ||
-      process.env.LEMON_SQUEEZY_API_KEY,
+    process.env.NEXT_PUBLIC_LEMON_SQUEEZY_VARIANT_ID ||
+      process.env.LEMON_SQUEEZY_VARIANT_ID,
   );
 }
 
+/** Demo Pass cookies are local-dev only. Production never issues a fake unlock. */
 export function demoUnlockAllowed(): boolean {
-  if (process.env.ALLOW_DEMO_UNLOCK === "true") {
-    return true;
-  }
-  if (process.env.LEMON_SQUEEZY_WEBHOOK_SECRET) {
+  if (process.env.NODE_ENV === "production") {
     return false;
   }
-  return process.env.NODE_ENV !== "production";
+  if (process.env.ALLOW_DEMO_UNLOCK === "false") {
+    return false;
+  }
+  return true;
 }
 
 export async function signSession(payload: SessionPayload): Promise<string> {

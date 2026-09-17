@@ -4,6 +4,10 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CheckCircle2, Ticket } from "lucide-react";
 import { GlassPanel } from "@/components/GlassPanel";
+import {
+  orderIdFromSearchParams,
+  writeStoredPassUnlock,
+} from "@/lib/pass-unlock";
 import { useMapSession } from "@/stores/map-session";
 
 export default function PassSuccessPage() {
@@ -14,19 +18,50 @@ export default function PassSuccessPage() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const demo = params.get("demo") === "1";
-    const path = demo ? "/api/checkout/complete?demo=1" : "/api/checkout/complete";
-    void fetch(path, { method: "POST" })
-      .then(async (response) => {
-        const json = (await response.json()) as { error?: string; source?: string };
+    const orderId = orderIdFromSearchParams(params);
+
+    async function finish(): Promise<void> {
+      if (demo) {
+        const response = await fetch("/api/checkout/complete?demo=1", {
+          method: "POST",
+        });
+        const json = (await response.json()) as { error?: string };
         if (!response.ok) {
-          throw new Error(json.error ?? "Could not unlock the Pass.");
+          throw new Error(json.error ?? "Demo unlock is disabled.");
         }
-        setStatus("ok");
-        setDetail(
-          json.source === "demo"
-            ? "Demo Pass unlocked for local development. This is not a Lemon Squeezy receipt."
-            : "Signed Pass cookie stored. Your map is unlocked on this browser.",
+        writeStoredPassUnlock({
+          orderId: "demo",
+          unlockedAt: new Date().toISOString(),
+          source: "demo",
+        });
+        setDetail("Demo Pass unlocked for local development. Not a Lemon receipt.");
+        return;
+      }
+      if (!orderId) {
+        throw new Error(
+          "Lemon did not return an order id. If you paid, open the overlay again or wait for the webhook.",
         );
+      }
+      writeStoredPassUnlock({
+        orderId,
+        unlockedAt: new Date().toISOString(),
+        source: "lemon",
+      });
+      const response = await fetch("/api/checkout/complete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderId }),
+      });
+      const json = (await response.json()) as { error?: string };
+      if (!response.ok) {
+        throw new Error(json.error ?? "Could not unlock the Pass.");
+      }
+      setDetail("Pass unlocked on this browser (signed cookie + order id).");
+    }
+
+    void finish()
+      .then(async () => {
+        setStatus("ok");
         await hydrate();
       })
       .catch((error: unknown) => {

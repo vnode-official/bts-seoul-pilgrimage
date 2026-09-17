@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { readStoredPassUnlock } from "@/lib/pass-unlock";
 import type {
   AccessTier,
   MapFilter,
@@ -57,6 +58,30 @@ export const useMapSession = create<MapSessionState>((set, get) => ({
         return;
       }
       const data = (await response.json()) as PublicSession;
+      if (data.tier !== "premium") {
+        const stored = readStoredPassUnlock();
+        if (stored?.source === "lemon" && stored.orderId) {
+          const complete = await fetch("/api/checkout/complete", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ orderId: stored.orderId }),
+          });
+          if (complete.ok) {
+            const again = await fetch("/api/session", { cache: "no-store" });
+            if (again.ok) {
+              const next = (await again.json()) as PublicSession;
+              set({
+                tier: next.tier,
+                sessionSource: next.source,
+                demoUnlockAvailable: next.demoUnlockAvailable,
+                lemonConfigured: next.lemonConfigured,
+                hydrated: true,
+              });
+              return;
+            }
+          }
+        }
+      }
       set({
         tier: data.tier,
         sessionSource: data.source,

@@ -49,10 +49,19 @@ App binds to **http://127.0.0.1:47501**.
 | Variable | Required | Purpose |
 | --- | --- | --- |
 | `JWT_SECRET` | For Pass cookies | HS256 secret (`jose`) |
-| `NEXT_PUBLIC_APP_URL` | Recommended in prod | Canonical origin for Lemon redirects |
-| Lemon vars | Optional | Real $19.99 checkout |
+| `NEXT_PUBLIC_APP_URL` | Recommended in prod | Canonical origin for Lemon `redirect_url` |
+| `NEXT_PUBLIC_LEMON_SQUEEZY_VARIANT_ID` | For paid Pass | Lemon variant id (overlay / hosted checkout) |
+| `NEXT_PUBLIC_LEMON_SQUEEZY_STORE_ID` | For overlay URL | Store slug (preferred) or numeric store id |
+| `LEMON_SQUEEZY_API_KEY` | Optional | Server checkout + `GET /v1/orders/{id}` paid check |
+| `LEMON_SQUEEZY_WEBHOOK_SECRET` | Optional | Verify `order_created` (cannot set the buyer cookie) |
 | `NEXT_PUBLIC_NAVER_MAP_CLIENT_ID` | **No** | Unused for core UX. Do not create a Naver Cloud account for this app. |
 | Seoul / Kakao REST keys | **No** | Optional live arrivals / Navi ETA. Hidden when unset. Never faked. |
+
+Without the public Lemon variant id, production shows **Checkout not configured** — it will not mint a fake Pass. Locally, a labeled demo cookie is still available.
+
+After payment, Lemon.js `Checkout.Success` (overlay) or `/pass/success?order_id=` (hosted) writes `bts_pass_unlock` in `localStorage` and a signed `bts_pass` cookie keyed to the order id.
+
+**Webhook later:** persist paid order ids from `/api/webhooks/lemon` and reject `/api/checkout/complete` unless the id is in that store or `GET /v1/orders/{id}` returns `paid`.
 
 ## Vercel
 
@@ -63,7 +72,7 @@ No Naver Cloud client id is required to redeploy.
 ## Product
 
 - **Free:** public historical pins, selected Goyang landmarks, two Seoul kitchens, airport taxi / T-money / AREX rules, Naver Map open + routing for those pins
-- **Pass $19.99:** all Seoul + Goyang pins as destinations + full subway hacks
+- **Pass $19.99:** Lemon Squeezy overlay checkout when public variant/store env is set; all Seoul + Goyang pins as destinations + full subway hacks
 - Food ratings: `ratingSource: "curated"` editorial badges — **not** live Naver API scores
 - Kakao T: `kakaot://` then `taxi.kakao.com`
 
