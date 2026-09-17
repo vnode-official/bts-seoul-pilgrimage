@@ -8,7 +8,7 @@ import {
 export async function POST() {
   if (!demoUnlockAllowed()) {
     return NextResponse.json(
-      { error: "Demo unlock is disabled when Lemon webhooks are configured." },
+      { error: "Demo unlock is not available in production." },
       { status: 403 },
     );
   }

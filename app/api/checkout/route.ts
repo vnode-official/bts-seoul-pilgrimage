@@ -11,28 +11,37 @@ import type { CheckoutResponse } from "@/types";
 
 export async function POST(request: Request) {
   const successUrl = `${publicOrigin(request)}/pass/success`;
-  const pending = await signSession({
-    tier: "free",
-    source: "jwt",
-    checkoutId: `pending-${Date.now()}`,
-  });
-  setPendingCheckoutCookie(pending);
 
   if (lemonConfigured()) {
+    const pending = await signSession({
+      tier: "free",
+      source: "jwt",
+      checkoutId: `pending-${Date.now()}`,
+    });
+    setPendingCheckoutCookie(pending);
     const checkoutUrl = await createLemonCheckoutUrl(successUrl);
+    if (!checkoutUrl) {
+      return NextResponse.json(
+        { error: "Lemon Squeezy checkout URL could not be built." },
+        { status: 503 },
+      );
+    }
     const body: CheckoutResponse = {
       mode: "lemon",
       checkoutUrl,
-      message: "Redirecting to Lemon Squeezy.",
+      message: "Opening Lemon Squeezy checkout.",
     };
     return NextResponse.json(body);
   }
 
   if (!demoUnlockAllowed()) {
-    return NextResponse.json(
-      { error: "Lemon Squeezy is not configured." },
-      { status: 503 },
-    );
+    const body: CheckoutResponse = {
+      mode: "unconfigured",
+      checkoutUrl: null,
+      message:
+        "Lemon Squeezy is not configured. Set NEXT_PUBLIC_LEMON_SQUEEZY_VARIANT_ID on Vercel.",
+    };
+    return NextResponse.json(body, { status: 503 });
   }
 
   const body: CheckoutResponse = {

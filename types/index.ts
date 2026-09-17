@@ -102,7 +102,7 @@ export interface PublicSession {
 }
 
 export interface CheckoutResponse {
-  mode: "lemon" | "demo";
+  mode: "lemon" | "demo" | "unconfigured";
   checkoutUrl: string | null;
   message: string;
 }

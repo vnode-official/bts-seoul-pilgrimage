@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { LemonScript } from "@/components/LemonScript";
 import { useMapSession } from "@/stores/map-session";
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -10,5 +11,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
     void hydrate();
   }, [hydrate]);
 
-  return children;
+  return (
+    <>
+      <LemonScript />
+      {children}
+    </>
+  );
 }

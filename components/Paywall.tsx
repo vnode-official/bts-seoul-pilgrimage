@@ -1,51 +1,27 @@
 "use client";
 
-import { useState } from "react";
 import { Check, Ticket, X } from "lucide-react";
 import { GlassPanel } from "@/components/GlassPanel";
 import { PREMIUM_PRICE_USD } from "@/lib/access";
 import { formatUsd } from "@/lib/format";
 import { SPOTS } from "@/data/spots";
+import { useLemonCheckout } from "@/lib/use-lemon-checkout";
 import { useMapSession } from "@/stores/map-session";
-import type { CheckoutResponse } from "@/types";
 
 const INCLUDED = [
   `${SPOTS.length} editorial pins (Seoul + Goyang, BTS spots + curated Naver 4.8+ food)`,
   "Full subway transfer & boarding notes",
   "Airport–Gangnam taxi ceiling heuristic + route matrix",
-  "EN/KR ordering scripts at every kitchen",
+  "EN / KR ordering scripts at every kitchen",
 ];
 
 export function Paywall() {
   const open = useMapSession((s) => s.paywallOpen);
   const setPaywallOpen = useMapSession((s) => s.setPaywallOpen);
-  const demoUnlockAvailable = useMapSession((s) => s.demoUnlockAvailable);
-  const lemonConfigured = useMapSession((s) => s.lemonConfigured);
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const checkout = useLemonCheckout();
 
   if (!open) {
     return null;
-  }
-
-  async function startCheckout(): Promise<void> {
-    setBusy(true);
-    setError(null);
-    try {
-      const response = await fetch("/api/checkout", { method: "POST" });
-      const data = (await response.json()) as CheckoutResponse & { error?: string };
-      if (!response.ok) {
-        throw new Error(data.error ?? "Checkout unavailable.");
-      }
-      if (data.mode === "lemon" && data.checkoutUrl) {
-        window.location.href = data.checkoutUrl;
-        return;
-      }
-      window.location.href = "/pass/success?demo=1";
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Checkout failed.");
-      setBusy(false);
-    }
   }
 
   return (
@@ -83,24 +59,32 @@ export function Paywall() {
           </ul>
           <button
             type="button"
-            disabled={busy}
-            onClick={() => void startCheckout()}
-            className="mt-6 w-full rounded-2xl bg-accent py-3 text-[14px] font-medium text-white disabled:opacity-60"
+            disabled={checkout.disabled}
+            onClick={() => void checkout.startCheckout()}
+            className="mt-6 w-full rounded-2xl bg-accent py-3 text-[14px] font-medium text-white disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {busy
-              ? "Opening checkout…"
-              : lemonConfigured
-                ? "Continue to Lemon Squeezy"
-                : "Continue"}
+            {checkout.busy
+              ? "Opening Lemon checkout…"
+              : checkout.canLemon
+                ? `Unlock Pass · ${formatUsd(PREMIUM_PRICE_USD)}`
+                : checkout.demoUnlockAvailable
+                  ? "Local demo unlock"
+                  : "Checkout not configured"}
           </button>
-          {demoUnlockAvailable && !lemonConfigured ? (
-            <p className="mt-3 rounded-xl border border-amber-500/20 bg-amber-500/10 px-3 py-2 text-[11px] leading-4 text-amber-100/80">
-              Local dev only: Lemon variant IDs are not set. Checkout will issue
-              a signed demo Pass cookie after the success URL.
+          {!checkout.canLemon ? (
+            <p className="mt-3 rounded-xl border border-white/10 bg-black/30 px-3 py-2 text-[11px] leading-4 text-white/55">
+              {checkout.demoUnlockAvailable
+                ? "Local only: Lemon is unset, so this issues a labeled demo cookie — not a receipt."
+                : "Set NEXT_PUBLIC_LEMON_SQUEEZY_VARIANT_ID and NEXT_PUBLIC_LEMON_SQUEEZY_STORE_ID on Vercel, then redeploy. Production will not fake an unlock."}
             </p>
-          ) : null}
-          {error ? (
-            <p className="mt-3 text-[12px] text-red-300">{error}</p>
+          ) : (
+            <p className="mt-3 text-[11px] leading-4 text-white/40">
+              Lemon Squeezy overlay checkout. Hosted page opens if the overlay
+              script is blocked.
+            </p>
+          )}
+          {checkout.error ? (
+            <p className="mt-3 text-[12px] text-red-300">{checkout.error}</p>
           ) : null}
           <p className="mt-4 text-[11px] leading-4 text-white/35">
             Not affiliated with BTS, HYBE, Naver, or Kakao. No membership,

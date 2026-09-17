@@ -1,5 +1,9 @@
 import { createHmac, timingSafeEqual } from "crypto";
-import { lemonConfigured } from "@/lib/session";
+import {
+  lemonOverlayCheckoutUrl,
+  publicLemonStore,
+  publicLemonVariantId,
+} from "@/lib/lemon-public";
 
 export interface LemonCheckoutConfig {
   variantId: string;
@@ -8,26 +12,16 @@ export interface LemonCheckoutConfig {
 }
 
 export function getLemonConfig(): LemonCheckoutConfig | null {
-  const variantId =
-    process.env.LEMON_SQUEEZY_VARIANT_ID ||
-    process.env.NEXT_PUBLIC_LEMON_SQUEEZY_VARIANT_ID ||
-    "";
+  const variantId = publicLemonVariantId();
   if (!variantId) {
     return null;
   }
+  const serverStore = process.env.LEMON_SQUEEZY_STORE_ID?.trim() || null;
   return {
     variantId,
-    apiKey: process.env.LEMON_SQUEEZY_API_KEY ?? null,
-    storeId: process.env.LEMON_SQUEEZY_STORE_ID ?? null,
+    apiKey: process.env.LEMON_SQUEEZY_API_KEY?.trim() || null,
+    storeId: serverStore && /^\d+$/.test(serverStore) ? serverStore : publicLemonStore(),
   };
-}
-
-export function lemonBuyUrl(variantId: string, successUrl: string): string {
-  const url = new URL(`https://lemonsqueezy.com/checkout/buy/${variantId}`);
-  url.searchParams.set("redirect_url", successUrl);
-  url.searchParams.set("media", "0");
-  url.searchParams.set("dark", "1");
-  return url.toString();
 }
 
 export async function createLemonCheckoutUrl(
@@ -37,8 +31,10 @@ export async function createLemonCheckoutUrl(
   if (!config) {
     return null;
   }
-  if (!config.apiKey || !config.storeId) {
-    return lemonBuyUrl(config.variantId, successUrl);
+  const overlayUrl = lemonOverlayCheckoutUrl(successUrl);
+  const numericStore = config.storeId && /^\d+$/.test(config.storeId);
+  if (!config.apiKey || !numericStore) {
+    return overlayUrl;
   }
 
   const response = await fetch("https://api.lemonsqueezy.com/v1/checkouts", {
@@ -52,11 +48,12 @@ export async function createLemonCheckoutUrl(
       data: {
         type: "checkouts",
         attributes: {
-          checkout_options: { dark: true, embed: false },
+          checkout_options: { dark: true, embed: true, media: false, logo: false },
           checkout_data: { custom: { product: "bts-seoul-pass" } },
           product_options: {
             redirect_url: successUrl,
             enabled_variants: [config.variantId],
+            receipt_button_text: "Open the map",
           },
         },
         relationships: {
@@ -68,12 +65,35 @@ export async function createLemonCheckoutUrl(
   });
 
   if (!response.ok) {
-    return lemonBuyUrl(config.variantId, successUrl);
+    return overlayUrl;
   }
   const json = (await response.json()) as {
     data?: { attributes?: { url?: string } };
   };
-  return json.data?.attributes?.url ?? lemonBuyUrl(config.variantId, successUrl);
+  return json.data?.attributes?.url ?? overlayUrl;
+}
+
+export async function lemonOrderIsPaid(orderId: string): Promise<boolean | "unverified"> {
+  const apiKey = process.env.LEMON_SQUEEZY_API_KEY?.trim();
+  if (!apiKey) {
+    return "unverified";
+  }
+  const response = await fetch(
+    `https://api.lemonsqueezy.com/v1/orders/${encodeURIComponent(orderId)}`,
+    {
+      headers: {
+        Accept: "application/vnd.api+json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+    },
+  );
+  if (!response.ok) {
+    return false;
+  }
+  const json = (await response.json()) as {
+    data?: { attributes?: { status?: string } };
+  };
+  return json.data?.attributes?.status === "paid";
 }
 
 export function verifyLemonSignature(
@@ -91,8 +111,4 @@ export function verifyLemonSignature(
     return false;
   }
   return timingSafeEqual(left, right);
-}
-
-export function lemonCheckoutReady(): boolean {
-  return lemonConfigured();
 }
